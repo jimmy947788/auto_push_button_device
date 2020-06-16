@@ -18,11 +18,21 @@ namespace AutoPushDevice
     public partial class MainForm : Form
     {
         byte MSG_DEVICE_INFO = 0x00;
-        byte MSG_TRIGGER_1 = 0x01;
-        byte MSG_TRIGGER_2 = 0x02;
-        byte MSG_TRIGGER_3 = 0x03;
-        byte MSG_TRIGGER_4 = 0x04;
-        byte MSG_TRIGGER_5 = 0x05;
+        byte MSG_PUSH_1 = 0x01;
+        byte MSG_PUSH_2 = 0x02;
+        byte MSG_PUSH_3 = 0x03;
+        byte MSG_PUSH_4 = 0x04;
+        byte MSG_PUSH_5 = 0x05;
+        byte MSG_OPEN_1 = 0x06;
+        byte MSG_OPEN_2 = 0x07;
+        byte MSG_OPEN_3 = 0x08;
+        byte MSG_OPEN_4 = 0x09;
+        byte MSG_OPEN_5 = 0x0a;
+        byte MSG_CLOSE_1 = 0x0b;
+        byte MSG_CLOSE_2 = 0x0c;
+        byte MSG_CLOSE_3 = 0x0d;
+        byte MSG_CLOSE_4 = 0x0e;
+        byte MSG_CLOSE_5 = 0x0f;
         bool IsRightPort = true;
 
         public MainForm()
@@ -35,11 +45,12 @@ namespace AutoPushDevice
         {
             toolStripStatusLabel1.Text = string.Format("Serial:{0}", ddlSerialPort.SelectedItem);
             toolStripStatusLabel2.Text = string.Format("Status:{0}", (serialPort1.IsOpen ? "Open" : "Close"));
-            btnTrigger1.Enabled = (IsRightPort && serialPort1.IsOpen);
-            btnTrigger2.Enabled = (IsRightPort && serialPort1.IsOpen);
-            btnTrigger3.Enabled = (IsRightPort && serialPort1.IsOpen);
-            btnTrigger4.Enabled = (IsRightPort && serialPort1.IsOpen);
-            btnTrigger5.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox1.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox2.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox3.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox4.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox5.Enabled = (IsRightPort && serialPort1.IsOpen);
+            groupBox5.Enabled = (IsRightPort && serialPort1.IsOpen);
             btnOpenSerial.Enabled = !serialPort1.IsOpen;
             btnCloseSerial.Enabled = serialPort1.IsOpen;
         }
@@ -61,16 +72,25 @@ namespace AutoPushDevice
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            btnTrigger1.Text = ConfigurationManager.AppSettings["trigger1_Name"];
-            btnTrigger1.Enabled = false;
-            btnTrigger2.Text = ConfigurationManager.AppSettings["trigger2_Name"];
-            btnTrigger2.Enabled = false;
-            btnTrigger3.Text = ConfigurationManager.AppSettings["trigger3_Name"];
-            btnTrigger3.Enabled = false;
-            btnTrigger4.Text = ConfigurationManager.AppSettings["trigger4_Name"];
-            btnTrigger4.Enabled = false;
-            btnTrigger5.Text = ConfigurationManager.AppSettings["trigger5_Name"];
-            btnTrigger5.Enabled = false;
+            groupBox1.Text = ConfigurationManager.AppSettings["trigger1_Name"];
+            groupBox1.Enabled = false;
+            txtAngle1.Value = Convert.ToInt32(ConfigurationManager.AppSettings["trigger1_angel"]);
+            
+            groupBox2.Text = ConfigurationManager.AppSettings["trigger2_Name"];
+            groupBox2.Enabled = false;
+            txtAngle2.Value = Convert.ToInt32(ConfigurationManager.AppSettings["trigger2_angel"]);
+            
+            groupBox3.Text = ConfigurationManager.AppSettings["trigger3_Name"];
+            groupBox3.Enabled = false;
+            txtAngle3.Value = Convert.ToInt32(ConfigurationManager.AppSettings["trigger3_angel"]);
+
+            groupBox4.Text = ConfigurationManager.AppSettings["trigger4_Name"];
+            groupBox4.Enabled = false;
+            txtAngle4.Value = Convert.ToInt32(ConfigurationManager.AppSettings["trigger4_angel"]);
+
+            groupBox5.Text = ConfigurationManager.AppSettings["trigger5_Name"];
+            groupBox5.Enabled = false;
+            txtAngle5.Value = Convert.ToInt32(ConfigurationManager.AppSettings["trigger5_angel"]);
 
             ddlSerialPort.DataSource = SerialPort.GetPortNames();
             UpdateStatus();
@@ -94,43 +114,53 @@ namespace AutoPushDevice
             UpdateStatus();
         }
 
-        private void btnTrigger1_Click(object sender, EventArgs e)
+        private void btnPush1_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                SendMessage(MSG_TRIGGER_1);
+                int angle = Convert.ToInt32(txtAngle1.Value);
+                SendMessage(Convert.ToByte(angle));
+                SendMessage(MSG_PUSH_1);
             }
         }
 
-        private void btnTrigger2_Click(object sender, EventArgs e)
+        private void btnPush2_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                SendMessage(MSG_TRIGGER_2);
+                int angle = Convert.ToInt32(txtAngle2.Value);
+                SendMessage(Convert.ToByte(angle));
+                SendMessage(MSG_PUSH_2);
             }
         }
 
-        private void btnTrigger3_Click(object sender, EventArgs e)
+        private void btnPush3_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                SendMessage(MSG_TRIGGER_3);
+                int angle = Convert.ToInt32(txtAngle3.Value);
+                SendMessage(Convert.ToByte(angle));
+                SendMessage(MSG_PUSH_3);
             }
         }
 
-        private void btnTrigger4_Click(object sender, EventArgs e)
+        private void btnPush4_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                SendMessage(MSG_TRIGGER_4);
+                int angle = Convert.ToInt32(txtAngle4.Value);
+                SendMessage(Convert.ToByte(angle));
+                SendMessage(MSG_PUSH_4);
             }
         }
 
-        private void btnTrigger5_Click(object sender, EventArgs e)
+        private void btnPush5_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                SendMessage(MSG_TRIGGER_5);
+                int angle = Convert.ToInt32(txtAngle5.Value);
+                SendMessage(Convert.ToByte(angle));
+                SendMessage(MSG_PUSH_5);
             }
         }
 
@@ -156,6 +186,86 @@ namespace AutoPushDevice
             if(serialPort1.IsOpen)
             {
                 serialPort1.Close();
+            }
+        }
+
+        private void btnUsbClose1_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_CLOSE_1);
+            }
+        }
+
+        private void btnUsbOpen1_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_OPEN_1);
+            }
+        }
+
+        private void btnUsbOpen2_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_OPEN_2);
+            }
+        }
+
+        private void btnUsbOpen3_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_OPEN_3);
+            }
+        }
+
+        private void btnUsbOpen4_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_OPEN_4);
+            }
+        }
+
+        private void btnUsbOpen5_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_OPEN_5);
+            }
+        }
+
+        private void btnUsbClose2_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_CLOSE_2);
+            }
+        }
+
+        private void btnUsbClose3_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_CLOSE_3);
+            }
+        }
+
+        private void btnUsbClose4_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_CLOSE_4);
+            }
+        }
+
+        private void btnUsbClose5_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                SendMessage(MSG_CLOSE_5);
             }
         }
     }
